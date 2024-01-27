@@ -10,7 +10,7 @@ public class WallMovement : MonoBehaviour
     void Start()
     {
       
-        wallPos = GameObject.Find("Wall").GetComponent<Transform>();
+        wallPos = GetComponent<Transform>();
         
     }
         
