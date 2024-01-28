@@ -5,9 +5,10 @@ using System;
 
 public class CollisionSubject : MonoBehaviour
 {
-    public event Action Collide, Wrong;
+    public event Action Collide, Neutral;
     private CapsuleCollider bodyCollider;
-    public string tag;
+    public string tag0, tag1, tag2;
+    
 
     private void Start()
     {
@@ -15,13 +16,17 @@ public class CollisionSubject : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag(tag))
+        if(other.gameObject.CompareTag(tag0))
         {
             Collide?.Invoke();
         }
-        else 
+        else if(other.gameObject.CompareTag(tag1))
         {
-            Wrong?.Invoke();
+            Neutral?.Invoke();
+        }
+        else if(other.gameObject.CompareTag(tag2))
+        {
+            Neutral?.Invoke();
         }
     }
 }

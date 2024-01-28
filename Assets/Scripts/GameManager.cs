@@ -8,10 +8,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int time = 0;
     [SerializeField] int score;
     [SerializeField] int health;
-    [SerializeField] public int gameDifficulty = 1;
+    [SerializeField] public float gameDifficulty = 1;
+    public float timeToSpawn;
     [SerializeField] public bool isGameOver;
     [SerializeField] GameObject spawner, uiGameplay,rayLeft, rayRight;
-    AudioSource[] allAudios;
+    AudioSource output;
+    [SerializeField]AudioClip winSound;
+
     public int Health
     {
         get => health;
@@ -41,33 +44,49 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        allAudios = Camera.main.gameObject.GetComponents<AudioSource>();
-        
-
+        output = FindObjectOfType<AudioSource>();
         StartCoroutine(PlayTimer());
     }
     IEnumerator PlayTimer()
     {
-        while (health > 0 )
+        while (health > 0 && time < 120)
         {
             UIManager.Instance.UpdateUIScore(score);
             UIManager.Instance.UpdateUIHealth(health);
             //UIManager.Instance.UpdateUITime(time);
             yield return new WaitForSeconds(1);
-             if (time % 5 == 0)
+             if (time % 20 == 0)
             {    
-                gameDifficulty+=1;
+                gameDifficulty+=0.6f;
+                timeToSpawn = (timeToSpawn / gameDifficulty) * 1.75f;
                 //updateAudio();
             }
             time++;
         }
         UIManager.Instance.UpdateUIScore(score);
         UIManager.Instance.UpdateUIHealth(0);
-        GameOver();
+        if(health <= 0)
+        {
+            GameOver();
+        }
+        else
+        {
+            WinGame();
+            output.Stop();
+            PlaySfx(winSound);
+        }
     }
 
     public void PlayAgain(){
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void ChangeScene(string sceneName){
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void CloseGame()
+    {
+        Application.Quit();
     }
 
      
@@ -78,11 +97,23 @@ public class GameManager : MonoBehaviour
         rayLeft.SetActive(true);
         rayRight.SetActive(true);
     }
-
-    public void TakeDamage()
+    public void WinGame()
     {
-        health -= 5;
+        UIManager.Instance.ShowWinGameScreen();
+        spawner.SetActive(false);
+        uiGameplay.SetActive(false);
+        rayLeft.SetActive(true);
+        rayRight.SetActive(true);
     }
 
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+    }
+
+    public void PlaySfx(AudioClip clipSound)
+    {
+        output.PlayOneShot(clipSound);
+    }
     
 }

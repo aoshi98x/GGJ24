@@ -9,6 +9,9 @@ TagManager:
   - LeftHand
   - RightHand
   - Wall
+  - HeadControl
+  - LeftControl
+  - RightControl
   layers:
   - Default
   - TransparentFX

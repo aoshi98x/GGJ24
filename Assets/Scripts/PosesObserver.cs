@@ -4,37 +4,54 @@ using UnityEngine;
 
 public class PosesObserver : MonoBehaviour
 {
-    [SerializeField] CollisionSubject[] subjectToObserve;
+    [SerializeField] Destructor subjectToObserve;
 
+    [SerializeField] AudioClip[] soundClips;
 
     private void Awake()
     {
         if (subjectToObserve != null)
         {
-            for (int i = 0; i < subjectToObserve.Length; i++)
-            {
-                subjectToObserve[i].Collide += Coincidence;
-                subjectToObserve[i].Wrong += NoCoincidence;
-            }
+          
+          subjectToObserve.Strong += TotalCoincidence;
+          subjectToObserve.Medium += MediumCoincidence;
+          subjectToObserve.Light += LightCoincidence;
+          subjectToObserve.None += NoCoincidence;
+          
         }
     }
 
-    private void Coincidence()
+    private void TotalCoincidence()
     {
+        GameManager.Instance.PlaySfx(soundClips[0]);
         if(GameManager.Instance.Health < 100)
         {
-            GameManager.Instance.Health = 5;
+            GameManager.Instance.Health = 15;
         }
-        else if(GameManager.Instance.Health > 100)
+        else if(GameManager.Instance.Health >= 100)
         {
-            GameManager.Instance.Health = 100;
+            GameManager.Instance.Health = 0;
         }
 
         GameManager.Instance.Score = 25;
     }
+    private void MediumCoincidence()
+    {
+        if (GameManager.Instance.Health < 100)
+        {
+            GameManager.Instance.Health = 5;
+        }
+        GameManager.Instance.Score = 10;
+    }
+    private void LightCoincidence()
+    {
+        GameManager.Instance.TakeDamage(5);
+        GameManager.Instance.Score = 5;
+    }
     private void NoCoincidence()
     {
-        GameManager.Instance.TakeDamage();
+        GameManager.Instance.PlaySfx(soundClips[1]);
+        GameManager.Instance.TakeDamage(15);
     }
 
     private void OnDestroy()
@@ -42,12 +59,12 @@ public class PosesObserver : MonoBehaviour
         // unsubscribe/deregister from the event if we destroy the object
         if (subjectToObserve != null)
         {
-            for (int i = 0; i < subjectToObserve.Length; i++)
-            {
-                subjectToObserve[i].Collide -= Coincidence;
-                subjectToObserve[i].Wrong -= NoCoincidence;
-            }
-            
+             subjectToObserve.Strong -= TotalCoincidence;
+             subjectToObserve.Medium -= MediumCoincidence;
+             subjectToObserve.Light -= LightCoincidence;
+             subjectToObserve.None -= NoCoincidence;
+
+
         }
     }
 }

@@ -6,7 +6,6 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] Transform initialPoint, destinyPoint;
     [SerializeField] GameObject wall;
-    [SerializeField] float timeToSpawn;
     public float time;
     [SerializeField] float velocityFactor;
     // Start is called before the first frame update
@@ -18,7 +17,9 @@ public class SpawnManager : MonoBehaviour
 
     private void Update() {
 
-        if (time >= timeToSpawn)
+        
+
+        if (time >= GameManager.Instance.timeToSpawn)
         {
             Instantiate(wall, initialPoint.position, Quaternion.Euler(0,180,0));
             time = 0;
