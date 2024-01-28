@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator PlayTimer()
     {
-        while (health > 0 && time < 120)
+        while (health > 0 && time < 90)
         {
             UIManager.Instance.UpdateUIScore(score);
             UIManager.Instance.UpdateUIHealth(health);
@@ -58,7 +58,10 @@ public class GameManager : MonoBehaviour
              if (time % 20 == 0)
             {    
                 gameDifficulty+=0.6f;
-                timeToSpawn = (timeToSpawn / gameDifficulty) * 1.75f;
+                if (timeToSpawn > 0.7)
+                {
+                    timeToSpawn = (timeToSpawn / gameDifficulty) * 1.75f;
+                }
                 //updateAudio();
             }
             time++;
@@ -92,7 +95,7 @@ public class GameManager : MonoBehaviour
      
     public void GameOver(){
         UIManager.Instance.ShowGameOverScreen();
-        spawner.SetActive(false);
+        spawner.GetComponent<SpawnManager>().enabled = false;
         uiGameplay.SetActive(false);
         rayLeft.SetActive(true);
         rayRight.SetActive(true);
@@ -100,7 +103,7 @@ public class GameManager : MonoBehaviour
     public void WinGame()
     {
         UIManager.Instance.ShowWinGameScreen();
-        spawner.SetActive(false);
+        spawner.GetComponent<SpawnManager>().enabled = false;
         uiGameplay.SetActive(false);
         rayLeft.SetActive(true);
         rayRight.SetActive(true);

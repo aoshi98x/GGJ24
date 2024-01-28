@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI  healthText;
-    [SerializeField] TextMeshProUGUI  finalScoreText;
+    [SerializeField] TextMeshProUGUI  finalScoreText, finalWinScore;
     [SerializeField] GameObject gameOverScreen, winGameScreen;
 
 private void Awake(){
@@ -32,7 +32,7 @@ private void Awake(){
     public void ShowWinGameScreen()
     {
         winGameScreen.SetActive(true);
-        finalScoreText.text = "" + GameManager.Instance.Score;
+        finalWinScore.text = "" + GameManager.Instance.Score;
     }
 
 }
