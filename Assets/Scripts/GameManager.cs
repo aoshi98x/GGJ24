@@ -7,11 +7,21 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     [SerializeField] public int time = 0;
     [SerializeField] int score;
-    [SerializeField] public int health = 5;
+    [SerializeField] int health;
     [SerializeField] public int gameDifficulty = 1;
     [SerializeField] public bool isGameOver;
-    [SerializeField] GameObject spawner, uiGameplay;
+    [SerializeField] GameObject spawner, uiGameplay,rayLeft, rayRight;
     AudioSource[] allAudios;
+    public int Health
+    {
+        get => health;
+        set
+        {
+            health += value;
+            //Update game UI with the actual score
+            UIManager.Instance.UpdateUIHealth(health);
+        }
+    }
     public int Score
     {
         get => score;
@@ -65,10 +75,14 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.ShowGameOverScreen();
         spawner.SetActive(false);
         uiGameplay.SetActive(false);
+        rayLeft.SetActive(true);
+        rayRight.SetActive(true);
     }
 
     public void TakeDamage()
     {
-        health -= 1;
+        health -= 5;
     }
+
+    
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PosesObserver : MonoBehaviour
 {
     [SerializeField] CollisionSubject[] subjectToObserve;
-    [SerializeField] int score, life;
+
 
     private void Awake()
     {
@@ -21,21 +21,19 @@ public class PosesObserver : MonoBehaviour
 
     private void Coincidence()
     {
-        if(life<100)
+        if(GameManager.Instance.Health < 100)
         {
-            life += 5;
+            GameManager.Instance.Health = 5;
         }
-        else if(life >100)
+        else if(GameManager.Instance.Health > 100)
         {
-            life = 100;
+            GameManager.Instance.Health = 100;
         }
 
-        score += 500;
         GameManager.Instance.Score = 25;
     }
     private void NoCoincidence()
     {
-        life -= 5;
         GameManager.Instance.TakeDamage();
     }
 
