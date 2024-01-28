@@ -31,10 +31,12 @@ public class PosesObserver : MonoBehaviour
         }
 
         score += 500;
+        GameManager.Instance.Score = 25;
     }
     private void NoCoincidence()
     {
         life -= 5;
+        GameManager.Instance.TakeDamage();
     }
 
     private void OnDestroy()
